@@ -1,10 +1,15 @@
 #Customer Requests
 
 main page
+
 calendar of events
+
 past event pages with results and with photos/video
+
 e-commerce for some apparel
+
 sponsor links
+
 blog with ad space.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
