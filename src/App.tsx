@@ -1,5 +1,8 @@
 import React from 'react';
 import './App.css';
+import firebase from 'firebase/compat/app';
+
+console.log(firebase);
 
 function App() {
   return (
