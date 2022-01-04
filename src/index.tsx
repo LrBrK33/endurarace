@@ -1,8 +1,9 @@
+/* eslint-disable react/jsx-filename-extension */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import { Provider } from 'react-redux';
-import App from './App.js';
+import App from './App';
 import { store } from './app/store';
 // import * as serviceWorker from './serviceWorker';
 // Import the functions you need from the SDKs you need
@@ -13,7 +14,7 @@ ReactDOM.render(
       <App />
     </Provider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );
 
 // If you want your app to work offline and load faster, you can change

@@ -29,6 +29,7 @@ module.exports = {
   rules: {
     quotes: ['error', 'single'],
     'import/no-unresolved': 0,
-    quote-props: ["error", "as-needed"]
+    quote-props: ["error", "as-needed"],
+    'react/jsx-filename-extension': [1, { 'extensions': ['.js', '.jsx', '.ts', '.tsx'] }],
   },
 };
