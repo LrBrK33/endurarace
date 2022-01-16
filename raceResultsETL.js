@@ -1,9 +1,13 @@
-import { db } from './src/firebase.ts';
-import { writeBatch, batch } from 'firebase/firestore';
+import { initializeApp, cert } from 'firebase-admin/app';
+import { getFirestore, admin } from 'firebase-admin/firestore';
 import { readFile } from 'fs/promises';
 import { promisify } from 'util';
 import { parse } from 'csv-parse';
+import { adminConfig } from './config/endurarace-5a58a-firebase-adminsdk-8tje2-2294bb53ac.js';
 const parser = promisify(parse);
+
+const app = initializeApp({ credential: cert(adminConfig) }, 'test');
+const db = getFirestore(app);
 
 if (process.argv.length < 3) {
   console.error('Please include a path to a csv file');
@@ -11,8 +15,7 @@ if (process.argv.length < 3) {
 }
 
 async function writeToFirestore(records, db) {
-  //   const batchCommits = [];
-  // const batch = db.batch();
+  const batch = db.batch();
   records.forEach((record, i) => {
     var docRef = db
       .collection('events')
