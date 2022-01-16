@@ -1,14 +1,14 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { apiKeys } from './config.js';
+import apiKeys from './config.js';
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: apiKeys.firebase,
+  apiKey: apiKeys.firebaseAPIKey,
   authDomain: 'endurarace-5a58a.firebaseapp.com',
   projectId: 'endurarace-5a58a',
   storageBucket: 'endurarace-5a58a.appspot.com',
@@ -17,8 +17,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
+console.log(firebaseConfig);
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-module.exports = { db, auth };
+export const auth = getAuth(app);
+export const db = getFirestore(app);

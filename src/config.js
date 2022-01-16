@@ -1,9 +1,9 @@
-const dotenv = require('dotenv');
+import dotenv from 'dotenv';
 
 dotenv.config();
 
-module.exports = {
-  apiKeys: {
-    firebase: process.env.FIREBASE_API_KEY,
-  },
+const apiKeys = {
+  firebaseAPIKey: process.env.FIREBASE_API_KEY,
 };
+
+export default apiKeys;
