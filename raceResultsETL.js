@@ -1,5 +1,5 @@
 import { initializeApp, cert } from 'firebase-admin/app';
-import { getFirestore, admin } from 'firebase-admin/firestore';
+import { getFirestore } from 'firebase-admin/firestore';
 import { readFile } from 'fs/promises';
 import { promisify } from 'util';
 import { parse } from 'csv-parse';
@@ -23,14 +23,7 @@ async function writeToFirestore(records, db) {
       .collection('results')
       .doc();
     batch.set(docRef, record);
-    // if ((i + 1) % 500 === 0) {
-    //   console.log(`Writing record ${i + 1}`);
-    //   batchCommits.push(batch.commit());
-    //   batch = db.batch();
-    // }
   });
-  //   batchCommits.push(batch.commit());
-  //   return Promise.all(batchCommits);
   await batch.commit();
 }
 
