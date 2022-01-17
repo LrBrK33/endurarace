@@ -24,35 +24,26 @@ let eventName = '';
 let eventDate = '';
 let docName = '';
 
-rl.question('Event name: ', function (name) {
-  rl.question('Event date (YYYY-MM-DD): ', function (date) {
-    eventName = name;
-    eventDate = date;
-    docName = `${name}-${date}`;
-    console.log(eventName, eventDate, docName);
-    rl.close();
-  });
-});
-rl.on('close', function () {
-  process.exit(0);
-});
-
-async function writeToFirestore(records, db) {
+async function writeToFirestore(results, db) {
   const batch = db.batch();
-  records.forEach((record, i) => {
-    var docRef = db
+  // write each result to Firestore
+  results.forEach((result, i) => {
+    var resultsRef = db
       .collection('events')
-      .doc(eventName)
+      .doc(docName)
       .collection('results')
       .doc();
-    batch.set(docRef, record);
+    batch.set(resultsRef, result);
   });
+  // write event info to Firestore
+  var eventInfoRef = db.collection('events').doc(docName);
+  batch.set(eventInfoRef, { eventName, eventDate });
   await batch.commit();
 }
 
 async function importCsv(csvFileName) {
   const fileContents = await readFile(csvFileName, 'utf8');
-  const records = await parser(fileContents, { columns: true });
+  const results = await parser(fileContents, { columns: true });
   function getMillisFromTime(time) {
     if (time.length > 0) {
       const timeSplit = time.split(':');
@@ -64,22 +55,35 @@ async function importCsv(csvFileName) {
     }
     return 0;
   }
-  // iterate over records, replace lap time strings with time in milliseconds
-  records.forEach((record) => {
-    record.lap1 = getMillisFromTime(record.lap1);
-    record.lap2 = getMillisFromTime(record.lap2);
-    record.lap3 = getMillisFromTime(record.lap3);
-    record.twoLapTotal = getMillisFromTime(record.twoLapTotal);
-    record.total = getMillisFromTime(record.total);
+
+  // iterate over results, replace lap time strings with time in milliseconds
+  results.forEach((result) => {
+    result.lap1 = getMillisFromTime(result.lap1);
+    result.lap2 = getMillisFromTime(result.lap2);
+    result.lap3 = getMillisFromTime(result.lap3);
+    result.twoLapTotal = getMillisFromTime(result.twoLapTotal);
+    result.total = getMillisFromTime(result.total);
   });
-  // console.log(records);
-  // try {
-  //   await writeToFirestore(records, db);
-  // } catch (e) {
-  //   console.error(e);
-  //   process.exit(1);
-  // }
-  // console.log(`Wrote ${records.length} records`);
+  try {
+    await writeToFirestore(results, db);
+  } catch (e) {
+    console.error(e);
+    process.exit(1);
+  }
+  console.log(`Wrote ${results.length} results`);
+  rl.close();
 }
 
-importCsv(process.argv[2]).catch((e) => console.error(e));
+// terminal prompts
+rl.question('Event name: ', function (name) {
+  rl.question('Event date (YYYY-MM-DD): ', function (date) {
+    eventName = name;
+    eventDate = date;
+    docName = `${name}-${date}`;
+    importCsv(process.argv[2]).catch((e) => console.error(e));
+  });
+});
+
+rl.on('close', function () {
+  process.exit(0);
+});
